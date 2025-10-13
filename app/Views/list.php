@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../public/assets/css/list.css">
+    <link rel="stylesheet" href="./public/assets/css/list.css">
     <title>Liste des Utilisateurs</title>
 
 </head>
@@ -18,7 +18,7 @@
 
         <h1>Liste des Utilisateurs</h1>
         
-        <a href="/users/form" class="btn">➕ Ajouter un utilisateur</a>
+        <a href="/login" class="btn">➕ Ajouter un utilisateur</a>
         
         <?php if (isset($_SESSION['success'])): ?>
             <div class="alert alert-success">

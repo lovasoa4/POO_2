@@ -27,6 +27,10 @@ $router->get('/users', 'UserController@index');
 $router->get('/users/form', 'UserController@form');
 $router->get('/affiche', 'UserController@testAffiche');
 $router->get('/transactions', 'UserController@transactions');
+$router->get('/login', 'UserController@login');
+
+
+
 
 
 $router->post('/users/store', 'UserController@store');

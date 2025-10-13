@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Models\User;
 use App\Models\Transaction;
 
+
 /**
  * CONTRÔLEUR USER
  * ===============
@@ -29,10 +30,6 @@ class UserController
         $this->view('list', ['users' => $users,'harena'=> 'Cousine Nay']);
     }
 
-    public function testAffiche(){
-        die("Henintsoa seth");
-    }
-
     
     
     /**
@@ -43,7 +40,11 @@ class UserController
         $this->view('form',['vola'=>'1 tapoitrisa AR']);
     }
     
-    
+    public function login()
+{
+    $this->view('login');
+}
+
     /**
      * Charger une vue
      */
@@ -78,6 +79,8 @@ class UserController
             'message' => $message
         ]);
     }
+
+ 
 
 
 
