@@ -32,6 +32,8 @@ class UserController
     public function testAffiche(){
         die("Henintsoa seth");
     }
+
+    
     
     /**
      * Afficher le formulaire
@@ -64,4 +66,19 @@ class UserController
         var_dump($_POST);
         die("Amiele");
     }
+
+
+////////
+    public function transactions()
+    {
+        $message = $this->transactionModel->getMessage();
+
+        // Envoie la donnée à la vue
+        $this->view('transactions', [
+            'message' => $message
+        ]);
+    }
+
+
+
 }
