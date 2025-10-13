@@ -1,0 +1,119 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: rgba(46, 139, 86, 0.568);
+}
+
+.login {
+  width: 100%;
+  max-width: 410px;
+  background: #fff;
+  color: black;
+  padding: 40px 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login h1 {
+  font-size: 30px;
+  text-align: center;
+  color: rgb(3, 126, 85);
+  margin-bottom: 30px;
+}
+
+.input-container {
+  margin-bottom: 20px;
+}
+
+.input-container label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.input-field {
+  position: relative;
+  width: 100%;
+}
+
+.input-field i {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #999;
+}
+
+.input-field input {
+  width: 100%;
+  padding: 12px 15px 12px 45px;
+  border: 2px solid gold;
+  border-radius: 40px;
+  font-size: 16px;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.input-field input::placeholder {
+  color: #999;
+}
+
+.input-field input:focus {
+  border-color: seagreen;
+}
+
+.submit {
+  width: 100%;
+  padding: 12px;
+  background: seagreen;
+  border: none;
+  border-radius: 40px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background 0.3s;
+}
+
+.submit:hover {
+  background: #2e8b57;
+}
+
+.creer_compte {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.creer_compte a {
+  color: seagreen;
+  text-decoration: none;
+}
+
+.creer_compte a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login {
+    padding: 30px 20px;
+  }
+
+  .input-field input {
+    font-size: 14px;
+  }
+
+  .input-field i {
+    font-size: 16px;
+  }
+}
