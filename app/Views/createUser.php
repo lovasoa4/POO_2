@@ -7,7 +7,7 @@
   <!-- Boxicons -->
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <!-- CSS -->
-  <link rel="stylesheet" href="./Assets/login.css"> <!-- On réutilise le même CSS -->
+  <link rel="stylesheet" href="../../public/assets/css/login.css"> <!-- On réutilise le même CSS -->
 </head>
 <body>
   <div class="login">
