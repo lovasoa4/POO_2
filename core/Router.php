@@ -40,14 +40,25 @@ class Router
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = $this->getUri();
-        
-        // Vérifier si la route existe
-        if (isset($this->routes[$method][$uri])) {
-            $action = $this->routes[$method][$uri];
-            $this->executeAction($action);
-        } else {
+
+        if (!isset($this->routes[$method])) {
             $this->notFound();
+            return;
         }
+
+        foreach ($this->routes[$method] as $routeUri => $action) {
+            // Convertir /css/:file en regex
+            $pattern = preg_replace('#:([\w]+)#', '([^/]+)', $routeUri);
+            $pattern = '#^' . $pattern . '$#';
+
+            if (preg_match($pattern, $uri, $matches)) {
+                array_shift($matches); // retire l'URL complète
+                $this->executeAction($action, $matches); // passer les params
+                return;
+            }
+        }
+
+        $this->notFound();
     }
     
     /**
@@ -71,20 +82,16 @@ class Router
     /**
      * Exécuter l'action du contrôleur
      */
-    private function executeAction($action)
+    private function executeAction($action, $params = [])
     {
-        // Séparer Controller@method
         list($controller, $method) = explode('@', $action);
-        
-        // Construire le nom complet de la classe
         $controllerClass = "App\\Controllers\\{$controller}";
-        
-        // Vérifier et exécuter
+
         if (class_exists($controllerClass)) {
             $controllerInstance = new $controllerClass();
-            
+
             if (method_exists($controllerInstance, $method)) {
-                $controllerInstance->$method();
+                call_user_func_array([$controllerInstance, $method], $params);
             } else {
                 $this->error("Méthode {$method} introuvable dans {$controller}");
             }
@@ -92,6 +99,7 @@ class Router
             $this->error("Contrôleur {$controller} introuvable");
         }
     }
+
     
     /**
      * Page 404

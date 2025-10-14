@@ -41,9 +41,17 @@ class UserController
     }
     
     public function createUser()
-{
+    {
     $this->view('createUser');
-}
+    }
+
+    public function dashboard()
+    {
+    $this->view('dashboard');
+    }
+
+    
+
 
     /**
      * Charger une vue
@@ -81,7 +89,21 @@ class UserController
     }
 
  
+/////////////////////////////////////////////////
 
+    public function css($filename)
+        {
+            $path = ROOT . '/public/assets/css/' . basename($filename);
+
+            if (file_exists($path)) {
+                header('Content-Type: text/css');
+                readfile($path);
+                exit;
+            } else {
+                http_response_code(404);
+                echo "Fichier CSS introuvable";
+            }
+        }
 
 
 }

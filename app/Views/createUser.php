@@ -7,7 +7,7 @@
   <!-- Boxicons -->
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <!-- CSS -->
-  <link rel="stylesheet" href="../../public/assets/css/login.css"> <!-- On réutilise le même CSS -->
+  <link rel="stylesheet" href="./assets/css/login.css"> <!-- On réutilise le même CSS -->
 </head>
 <body>
   <div class="login">
@@ -49,7 +49,7 @@
       <button type="submit" class="submit">Créer un compte</button>
 
       <div class="creer_compte">
-        <p>Déjà un compte ? <a href="login.html">Se connecter</a></p>
+        <p>Déjà un compte ? <a href="/dashboard">Se connecter</a></p>
       </div>
     </form>
   </div>
