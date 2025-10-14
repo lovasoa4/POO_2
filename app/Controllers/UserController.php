@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Models\User;
 use App\Models\Transaction;
 
+
 /**
  * CONTRÔLEUR USER
  * ===============
@@ -26,12 +27,10 @@ class UserController
     public function index()
     {
         $users = $this->userModel->getAll();
-        $this->view('list', ['users' => $users,'harena'=> 'Cousine Nay']);
+        $this->view('login', ['users' => $users,'harena'=> 'Cousine Nay']);
     }
 
-    public function testAffiche(){
-        die("Henintsoa seth");
-    }
+    
     
     /**
      * Afficher le formulaire
@@ -41,7 +40,11 @@ class UserController
         $this->view('form',['vola'=>'1 tapoitrisa AR']);
     }
     
-    
+    public function createUser()
+{
+    $this->view('createUser');
+}
+
     /**
      * Charger une vue
      */
@@ -62,6 +65,23 @@ class UserController
 
     public function store(){
         var_dump($_POST);
-        die("Amiele");
+        
     }
+
+
+////////
+    public function transactions()
+    {
+        $message = $this->transactionModel->getMessage();
+
+        // Envoie la donnée à la vue
+        $this->view('transactions', [
+            'message' => $message
+        ]);
+    }
+
+ 
+
+
+
 }
