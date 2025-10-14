@@ -13,12 +13,12 @@ use App\Models\Transaction;
 class UserController
 {
     private $userModel;
-    private $transactionModel;
+
     
     public function __construct()
     {
         $this->userModel = new User();
-        $this->transactionModel = new Transaction();
+
     }
     
     /**
@@ -75,17 +75,6 @@ class UserController
         
     }
 
-
-////////
-    public function transactions()
-    {
-        $message = $this->transactionModel->getMessage();
-
-        // Envoie la donnée à la vue
-        $this->view('transactions', [
-            'message' => $message
-        ]);
-    }
 
  
 /////////////////////////////////////////////////
