@@ -33,7 +33,7 @@
       <button type="submit" class="submit">Se connecter</button>
 
       <div class="creer_compte">
-        <p>Pas de compte ? <a href="#">Créer un compte</a></p>
+        <p>Pas de compte ? <a href="/createUser">Créer un compte</a></p>
       </div>
     </form>
   </div>

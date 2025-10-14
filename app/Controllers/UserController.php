@@ -27,7 +27,7 @@ class UserController
     public function index()
     {
         $users = $this->userModel->getAll();
-        $this->view('list', ['users' => $users,'harena'=> 'Cousine Nay']);
+        $this->view('login', ['users' => $users,'harena'=> 'Cousine Nay']);
     }
 
     
@@ -40,9 +40,9 @@ class UserController
         $this->view('form',['vola'=>'1 tapoitrisa AR']);
     }
     
-    public function login()
+    public function createUser()
 {
-    $this->view('login');
+    $this->view('createUser');
 }
 
     /**
@@ -65,7 +65,7 @@ class UserController
 
     public function store(){
         var_dump($_POST);
-        die("Amiele");
+        
     }
 
 
