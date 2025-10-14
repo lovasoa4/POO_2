@@ -49,7 +49,7 @@
       <button type="submit" class="submit">Créer un compte</button>
 
       <div class="creer_compte">
-        <p>Déjà un compte ? <a href="login.html">Se connecter</a></p>
+        <p>Déjà un compte ? <a href="/dashboard">Se connecter</a></p>
       </div>
     </form>
   </div>

@@ -30,7 +30,7 @@
         </div>
       </div>
 
-      <button type="submit" class="submit" >Se connecter</button>
+      <a href="/dashboard"><button type="submit" class="submit" >Se connecter</button></a>
 
       <div class="creer_compte">
         <p>Pas de compte ? <a href="/createUser">Créer un compte</a></p>
