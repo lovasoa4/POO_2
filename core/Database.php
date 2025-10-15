@@ -16,7 +16,7 @@ class Database{
             return $pdo;
         }
         catch( PDOException $e ){
-            die('erreur de connexion à la base'. $e->getMessage() );
+            die('erreur de connexion à la base....'. $e->getMessage() );
         }
     }
 }

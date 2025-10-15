@@ -39,7 +39,7 @@ class TransactionController
     //Affichage de tous les transaction
     public function afficher()
     {
-       
+        
         $transactions = Transaction::select_transaction();
         $tableau = [];
 
@@ -54,7 +54,7 @@ class TransactionController
             );
         }
               include(ROOT . '/app/Views/transaction.php');
-
+       
     }
 
         // Supprimer une transaction
