@@ -24,10 +24,9 @@ class UserController
     /**
      * Afficher la liste des utilisateurs
      */
-    public function index()
-    {
-        $users = $this->userModel->getAll();
-        $this->view('login', ['users' => $users,'harena'=> 'Cousine Nay']);
+   public function index()
+    {    
+      $this->view('login');
     }
 
     
