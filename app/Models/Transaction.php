@@ -3,7 +3,7 @@ namespace App\Models;
 
 use pdo;
 use PDOException;
-use Database;
+use Core\Database; 
 
 class Transaction {
     protected int $id;
@@ -54,14 +54,28 @@ class Transaction {
             die("Erreur d' insertion: " . $e->getMessage());
         }
     }
+    //fonction supprimer 
     public static function delete_transaction($id){
-           $db = new Database();
+        $db = new Database();
         $pdo = $db->getConnection();
         try {
             $stmt = $pdo->prepare("DELETE FROM transaction WHERE id = ? ");
             return $stmt->execute([$id]);
         } catch (PDOException $e) {
             die("Erreur de la suppression: " . $e->getMessage());
+        }
+    }
+
+    //affichage de crédit 
+        public static function select_credit() {
+        $db = new Database();
+        $pdo = $db->getConnection();
+        try {
+            $stmt = $pdo->prepare("SELECT id, type, date_transaction, montant, description, id_user FROM transaction WHERE type = Crédit  ORDER BY id ASC");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die("Erreur d'affichage: " . $e->getMessage());
         }
     }
 }

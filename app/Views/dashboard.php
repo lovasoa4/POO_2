@@ -17,7 +17,7 @@
       <nav class="menu">
         <a href="#" class="active"><i class='bx bx-grid-alt'></i> Tableau de bord</a>
         <a href="#"><i class='bx bx-user'></i> Utilisateurs</a>
-        <a href="#"><i class='bx bx-transfer-alt'></i> Transactions</a>
+        <a href="/afficher"><i class='bx bx-transfer-alt'></i> Transactions</a>
         <div class="submenu">
           <a href="#"><i class='bx bx-plus-circle'></i> Crédit</a>
           <a href="#"><i class='bx bx-minus-circle'></i> Débit</a>

@@ -1,4 +1,7 @@
 <?php
+namespace Core;
+use pdo;
+use PDOException;
 class Database{
     private $host = 'localhost';
     private $dbName = 'cash_track';
