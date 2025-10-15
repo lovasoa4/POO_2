@@ -32,9 +32,11 @@ $router->get('/dashboard','UserController@dashboard');
 
 
 $router->get('/afficher', 'TransactionController@afficher');
-$router->get('/ajout', 'TransactionController@ajout');
+$router->get('/ajout', 'TransactionController@formTransaction');
 $router->get('/delete', 'TransactionController@delete');
 $router->post('/users/store', 'UserController@store');
+
+$router->post('/ajout_Transaction', 'TransactionController@ajout');
 // $router->post('/users/delete', 'UserController@delete');
 
 // Exécuter le router
