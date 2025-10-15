@@ -13,21 +13,20 @@ use App\Models\Transaction;
 class UserController
 {
     private $userModel;
-    private $transactionModel;
+
     
     public function __construct()
     {
         $this->userModel = new User();
-        $this->transactionModel = new Transaction();
+
     }
     
     /**
      * Afficher la liste des utilisateurs
      */
-    public function index()
-    {
-        $users = $this->userModel->getAll();
-        $this->view('login', ['users' => $users,'harena'=> 'Cousine Nay']);
+   public function index()
+    {    
+      $this->view('login');
     }
 
     
@@ -76,17 +75,6 @@ class UserController
         
     }
 
-
-////////
-    public function transactions()
-    {
-        $message = $this->transactionModel->getMessage();
-
-        // Envoie la donnée à la vue
-        $this->view('transactions', [
-            'message' => $message
-        ]);
-    }
 
  
 /////////////////////////////////////////////////
