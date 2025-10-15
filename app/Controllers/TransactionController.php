@@ -6,8 +6,10 @@ use App\Models\Transaction;
 class TransactionController
 {   
         //  Ajouter une transaction
+        public function formTransaction(){
+             $this->view('Ajout_Transaction');
+        }
     public function ajout() {
-    $this->view('Ajout_Transaction');
         if (
 
             !empty($_POST["description"]) &&
@@ -30,7 +32,7 @@ class TransactionController
             }
 
             // Redirection après ajout
-            header("location:../view/ListeTransaction.php") ;
+            $this->view('dashboard');
             exit;
         }
     }

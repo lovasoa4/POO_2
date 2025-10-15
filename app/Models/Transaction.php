@@ -35,7 +35,7 @@ class Transaction {
         $db = new Database();
         $pdo = $db->getConnection();
         try {
-            $stmt = $pdo->prepare("SELECT id, type, date_transaction, montant, description, id_user FROM transaction ORDER BY id ASC");
+            $stmt = $pdo->prepare("SELECT id, type, date_transaction, montant, description, id_user FROM transaction ORDER BY id DESC");
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -49,7 +49,7 @@ class Transaction {
         $pdo = $db->getConnection();
         try {
             $stmt = $pdo->prepare("INSERT INTO transaction (type, date_transaction, montant, description, id_user) VALUES (?, ?, ?, ?, ?)");
-            return $stmt->execute([$type, $date_transaction, $montant, $description, $id_user]);
+            $stmt->execute([$type, $date_transaction, $montant, $description, $id_user]);
         } catch (PDOException $e) {
             die("Erreur d' insertion: " . $e->getMessage());
         }
