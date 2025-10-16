@@ -169,3 +169,74 @@ body {
   text-shadow: 0 2px 8px rgba(46, 139, 87, 0.2);
   transform: scale(1.05);
 }
+/* ==== Barre de recherche ==== */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid gold;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.search-bar:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: scale(1.02);
+}
+
+/* Champ de saisie (input date) */
+.search-input {
+  border: none;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: #2b6777;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  transition: background 0.3s, color 0.3s;
+}
+
+.search-input:focus {
+  background-color: #f9fff9;
+  color: #1f5c45;
+}
+
+/* Bouton  recherche */
+.btn-search {
+  background: seagreen;
+  border: none;
+  color: white;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-search i {
+  font-size: 15px;
+}
+
+.btn-search:hover {
+  background: #2e8b57;
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .search-bar {
+    width: 100%;
+  }
+
+  .search-input {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .btn-search {
+    padding: 8px 10px;
+  }
+}
