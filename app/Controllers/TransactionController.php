@@ -88,4 +88,16 @@ class TransactionController
             die("Vue {$viewName} introuvable");
         }
     }
+
+     public function recherche()
+    {
+        if (isset($_POST['date']) && !empty($_POST['date'])) {
+            $date = $_POST['date'];
+            $tableau = Transaction::select_by_date($date);
+        } else {
+            $tableau = Transaction::select_transaction();
+        }
+
+        $this->view('transaction', ['tableau' => $tableau]);
+    }
 }

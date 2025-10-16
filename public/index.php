@@ -37,6 +37,7 @@ $router->get('/delete', 'TransactionController@delete');
 $router->post('/users/store', 'UserController@store');
 
 $router->post('/ajout_Transaction', 'TransactionController@ajout');
+$router->post('/recherche','TransactionController@recherche');
 // $router->post('/users/delete', 'UserController@delete');
 
 // Exécuter le router
