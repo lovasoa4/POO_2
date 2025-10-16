@@ -82,8 +82,8 @@ body {
 }
 
 .table th {
-  background-color: seagreen;
-  color: #fff;
+  background-color: rgba(34, 98, 62, 0.377);
+  color: #040303;
   text-transform: uppercase;
   font-size: 0.9rem;
   padding: 12px 15px;
@@ -154,4 +154,18 @@ body {
   .btn-add {
     width: 100%;
   }
+}
+.page-title a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+}
+
+.page-title a:hover {
+  color: #2e8b57;
+  text-shadow: 0 2px 8px rgba(46, 139, 87, 0.2);
+  transform: scale(1.05);
 }

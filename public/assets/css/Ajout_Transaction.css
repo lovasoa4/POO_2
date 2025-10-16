@@ -1,0 +1,10 @@
+ body {
+            background: #f8f9fa;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .form-label {
+            font-weight: 600;
+        }

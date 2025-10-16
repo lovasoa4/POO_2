@@ -9,19 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!--  Icônes Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/Ajout_Transaction.css">
 
-    <style>
-        body {
-            background: #f8f9fa;
-        }
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .form-label {
-            font-weight: 600;
-        }
-    </style>
+   
 </head>
 <body>
 <div class="container py-5">
@@ -62,7 +52,7 @@
                     <input type="hidden" name="id_user" value="1">
 
                     <div class="d-flex justify-content-between">
-                        <a href="./ListeTransaction.php" class="btn btn-secondary">
+                        <a href="/dashboard" class="btn btn-secondary">
                             <i class="bi bi-arrow-left"></i> Retour
                         </a>
                         <button type="submit" class="btn btn-primary">

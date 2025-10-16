@@ -6,16 +6,30 @@
   <title>Liste des Transactions</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-  ><link rel="stylesheet" href="./assets/css/transaction.css">
+  <link rel="stylesheet" href="./assets/css/transaction.css">
 </head>
 
 <body>
 
-<div class="container py-5">
+<div class="container-page">
 
-  <!-- Header -->
+  <!-- Header avec barre de recherche -->
   <div class="d-flex justify-content-between align-items-center mb-4 header-bar">
-    <h2 class="page-title">📋 Liste des Transactions</h2>
+    <h2 class="page-title"><a href="/dashboard">Cash Track</a></h2>
+
+    <!-- Barre de recherche -->
+    <form action="/rechercher" method="get" class="d-flex align-items-center search-bar">
+      <input 
+        type="date" 
+        name="date"
+        class="form-control search-input"
+        placeholder="Rechercher par date..."
+      >
+      <button type="submit" class="btn-search">
+        <i class="bi bi-search"></i>
+      </button>
+    </form>
+
     <a href="/ajout" class="btn btn-add shadow-sm">
       <i class="bi bi-plus-circle me-1"></i> Ajouter une transaction
     </a>
