@@ -60,10 +60,10 @@ public static function se_connecter($email, $mdp){
     $pdo = $db->getConnection();
 
     try {
-        $stmt = $pdo->prepare("SELECT * FROM user WHERE email = :email AND mdp = :mdp");
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email AND mdp = :mdp");
         $stmt->execute([':email' => $email, ':mdp' => $mdp]);
         $con = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $con ? $con : false;
+        return $con;
     } catch (PDOException $e) {
         error_log("Erreur DB se_connecter: " . $e->getMessage());
         return false;

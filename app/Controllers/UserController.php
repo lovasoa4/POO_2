@@ -26,7 +26,7 @@ class UserController
      */
     public function index()
     {
-        $this->view('login');
+        $this->view('login', ['Erreur' => '']);
     }
 
 
@@ -91,17 +91,23 @@ class UserController
 
         public function Connection()
     {
-        if($_SERVER["REQUEST_METHOD"] == "POST") {
+
         if (!empty($_POST["email"]) && !empty($_POST["mdp"])) {
             $email = $_POST["email"];
             $mdp = $_POST["mdp"];
-            User::se_connecter($email, $mdp);
-            header("location: /dashboard");
+
+            if(User::se_connecter($email, $mdp)){
+                 $this->view("dashboard");
+            }
+            else{
+                 $this->view("login", ['Erreur' => 'email ou mot de passe incorrect']);
+
+            }
+            
         } else {
             echo "non reussit ";
         }
-    }
-    $this->view("dashboard");
+    
     }
     
 
@@ -113,11 +119,12 @@ class UserController
             $email = $_POST["email"];
             $mdp = $_POST["mdp"];
             User::create_User($nom, $email, $mdp);
-            header("location: /login");
-        } else {
-            echo "non reussit ";
+           $this->view("login");
+        }
+        else{
+             $this->view("createUser");
         }
     }
-    $this->view("login");
+    
     }
 }

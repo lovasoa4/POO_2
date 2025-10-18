@@ -10,6 +10,15 @@
   <link rel="stylesheet" href="./assets/css/login.css">
 </head>
 <body>
+
+  <?php 
+  if(!empty ($Erreur)) {
+    $message = htmlspecialchars_decode($Erreur);
+    echo '<script> alert('.$Erreur.')</script>';
+    $Erreur ="";
+  }
+  ?>
+
   <div class="login">
     <form action="/login" method="post">
       <h1>Se connecter</h1>
