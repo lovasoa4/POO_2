@@ -29,7 +29,9 @@ $router->get('/users/form', 'UserController@form');
 $router->get('/affiche', 'UserController@testAffiche');
 $router->get('/createUser', 'UserController@createUser');
 $router->get('/dashboard','UserController@dashboard');
-
+// route User
+$router->post('/createUser', 'UserController@insertion');
+$router->post('/login', 'UserController@Connection');
 
 $router->get('/afficher', 'TransactionController@afficher');
 $router->get('/ajout', 'TransactionController@formTransaction');

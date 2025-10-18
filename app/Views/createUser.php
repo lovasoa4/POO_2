@@ -11,14 +11,14 @@
 </head>
 <body>
   <div class="login">
-    <form action="">
+    <form action="/createUser" method="POST">
       <h1>Créer un compte</h1>
 
       <div class="input-container">
         <label for="name">Nom</label>
         <div class="input-field">
           <i class='bx bx-user'></i>
-          <input type="text" id="name" placeholder="Votre nom">
+          <input type="text" id="name" placeholder="Votre nom" name="nom">
         </div>
       </div>
 
@@ -26,7 +26,7 @@
         <label for="email">E-mail</label>
         <div class="input-field">
           <i class='bx bx-envelope'></i>
-          <input type="email" id="email" placeholder="exemple@gmail.com">
+          <input type="email" id="email" placeholder="exemple@gmail.com" name="email">
         </div>
       </div>
 
@@ -34,23 +34,11 @@
         <label for="password">Mot de passe</label>
         <div class="input-field">
           <i class='bx bx-lock'></i>
-          <input type="password" id="password" placeholder="Mot de passe">
-        </div>
-      </div>
-
-      <div class="input-container">
-        <label for="confirm-password">Confirmer le mot de passe</label>
-        <div class="input-field">
-          <i class='bx bx-lock-alt'></i>
-          <input type="password" id="confirm-password" placeholder="Confirmer le mot de passe">
+          <input type="password" id="password" placeholder="Mot de passe" name="mdp">
         </div>
       </div>
 
       <button type="submit" class="submit">Créer un compte</button>
-
-      <div class="creer_compte">
-        <p>Déjà un compte ? <a href="/dashboard">Se connecter</a></p>
-      </div>
     </form>
   </div>
 </body>

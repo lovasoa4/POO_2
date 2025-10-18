@@ -11,14 +11,14 @@
 </head>
 <body>
   <div class="login">
-    <form action="">
+    <form action="/login" method="post">
       <h1>Se connecter</h1>
 
       <div class="input-container">
         <label for="email">E-mail</label>
         <div class="input-field">
           <i class='bx bx-envelope'></i>
-          <input type="email" id="email" placeholder="exemple@gmail.com">
+          <input type="email" id="email" placeholder="exemple@gmail.com" name="email">
         </div>
       </div>
 
@@ -26,7 +26,7 @@
         <label for="password">Mot de passe</label>
         <div class="input-field">
           <i class='bx bx-lock'></i>
-          <input type="password" id="password" placeholder="Mot de passe">
+          <input type="password" id="password" placeholder="Mot de passe" name="mdp">
         </div>
       </div>
 
