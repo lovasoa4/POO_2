@@ -17,7 +17,7 @@ class TransactionController
         if (
 
             !empty($_POST["description"]) &&
-            !empty($_POST["type"]) &&
+            !empty($_POST["type"]) &&    
             !empty($_POST["montant"]) &&
             !empty($_POST["date_transaction"]) &&
             !empty($_POST["id_user"])
