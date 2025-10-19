@@ -1,6 +1,8 @@
 <?php
 namespace App\Models;
 
+use Core\Database;
+
 class Model_dashboard{
     private $debit;
     private $credit;
@@ -57,7 +59,10 @@ class Model_dashboard{
 
 
 
-    public static function selectAllData($db,$id_User){
+    public static function selectAllData($id_User){
+        $pdo = new Database();
+        $db = $pdo->getConnection();
+
         $sql='select vtc.mois , vtc.annee ,vtc.total as credit , vtd.total as debit ,vtd.id_user
                 from view_total_credit as vtc
                 inner join view_total_debit as vtd

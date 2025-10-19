@@ -1,7 +1,6 @@
 <?php
-
 // ============================================
-// 1. public/index.php (Point d'entrée)
+// 1. public/index.php (Point d'entrée principal)
 // ============================================
 
 // Définir les chemins racine
@@ -11,10 +10,7 @@ define('CORE', ROOT . '/core');
 
 // Charger l'autoloader
 require_once CORE . '/Autoloader.php';
-
-// Enregistrer l'autoloader
 Core\Autoloader::register();
-
 
 // Démarrer la session
 session_start();
@@ -22,25 +18,29 @@ session_start();
 // Créer le router
 $router = new Core\Router();
 
-// Définir les routes
+// ==========================
+// Définition des routes
+// ==========================
+
+// --- Routes utilisateur ---
 $router->get('/', 'UserController@index');
 $router->get('/users', 'UserController@index');
 $router->get('/users/form', 'UserController@form');
-$router->get('/affiche', 'UserController@testAffiche');
 $router->get('/createUser', 'UserController@createUser');
-$router->get('/dashboard','UserController@dashboard');
-// route User
 $router->post('/createUser', 'UserController@insertion');
 $router->post('/login', 'UserController@Connection');
 
+// --- Routes transaction ---
 $router->get('/afficher', 'TransactionController@afficher');
 $router->get('/ajout', 'TransactionController@formTransaction');
-$router->get('/delete', 'TransactionController@delete');
-$router->post('/users/store', 'UserController@store');
-
 $router->post('/ajout_Transaction', 'TransactionController@ajout');
-$router->post('/recherche','TransactionController@recherche');
-// $router->post('/users/delete', 'UserController@delete');
+$router->post('/recherche', 'TransactionController@recherche');
+$router->get('/transaction_Credit', 'TransactionController@afficherCredit');
+$router->get('/transaction_Debit', 'TransactionController@afficherDebit');
+$router->get('/delete', 'TransactionController@delete');
+
+// --- Dashboard ---
+$router->get('/dashboard', 'DashboardController@getAllDataDashboard');
 
 // Exécuter le router
 $router->run();

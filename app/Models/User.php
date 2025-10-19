@@ -70,4 +70,17 @@ public static function se_connecter($email, $mdp){
     }
 }
 
+public static function select_by_id($id_user){
+    $db = new Database();
+    $pdo = $db->getConnection();
+    try {
+        $stmt = $pdo->prepare("SELECT * nom  FROM users WHERE id = ?");
+        $stmt->execute([$id_user]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch(PDOException $e) {
+        return null;
+    }
+}
+
+
 }

@@ -1,15 +1,19 @@
 <?php
-namespace App\Controllers;
-use App\Models\Transaction;
 
+namespace App\Controllers;
+
+use App\Models\Transaction;
+use App\Models\Model_dashboard;
 
 class TransactionController
-{   
-        //  Ajouter une transaction
-        public function formTransaction(){
-             $this->view('Ajout_Transaction');
-        }
-    public function ajout() {
+{
+    //  Ajouter une transaction
+    public function formTransaction()
+    {
+        $this->view('Ajout_Transaction');
+    }
+    public function ajout()
+    {
         if (
 
             !empty($_POST["description"]) &&
@@ -31,15 +35,19 @@ class TransactionController
                 echo " <script>alert('Erreur lors de l'ajout de la transaction.');</script>";
             }
 
-            // Redirection après ajout
-            $this->view('dashboard');
-            exit;
+            $vars = Model_dashboard::selectAllData($_SESSION["id"]);
+            $tabData = array();
+            foreach ($vars as $var) {
+                $elements = new Model_dashboard($var['debit'], $var['credit'], $var['mois'], $var['annee'], $var['id_user']);
+                array_push($tabData, $elements);
+            }
+            $this->view("dashboard", ["tabData" => $tabData]);
         }
     }
     //Affichage de tous les transaction
     public function afficher()
     {
-        
+
         $transactions = Transaction::select_transaction();
         $tableau = [];
 
@@ -53,12 +61,12 @@ class TransactionController
                 $trans['id_user']
             );
         }
-              include(ROOT . '/app/Views/transaction.php');
-       
+        include(ROOT . '/app/Views/transaction.php');
     }
 
-        // Supprimer une transaction
-    public function delete() {
+    // Supprimer une transaction
+    public function delete()
+    {
         if (!empty($_POST["id_delete"])) {
             $id = $_POST["id_delete"];
             $success = Transaction::delete_transaction($id);
@@ -68,7 +76,7 @@ class TransactionController
             } else {
                 echo "<script>alert('Erreur lors de la suppression de la transaction.');</script>";
             }
-                header("location:../view/ListeTransaction.php") ;
+            header("location:../view/ListeTransaction.php");
             exit;
         }
     }
@@ -78,10 +86,10 @@ class TransactionController
     {
         // Extraire les données pour les rendre accessibles dans la vue
         extract($data);
-        
+
         // Charger la vue
         $viewPath = APP . '/Views/' . $viewName . '.php';
-        
+
         if (file_exists($viewPath)) {
             require_once $viewPath;
         } else {
@@ -89,7 +97,7 @@ class TransactionController
         }
     }
 
-     public function recherche()
+    public function recherche()
     {
         if (isset($_POST['date']) && !empty($_POST['date'])) {
             $date = $_POST['date'];
@@ -99,5 +107,54 @@ class TransactionController
         }
 
         $this->view('transaction', ['tableau' => $tableau]);
+    }
+
+
+    ////   // Afficher uniquement les Crédits avec recherche
+
+    public function afficherCredit()
+    {
+        $search = isset($_GET['search']) ? trim($_GET['search']) : "";
+        $transactions = Transaction::getCredit($search);
+        $tableau = [];
+
+        foreach ($transactions as $trans) {
+            $tableau[] = new Transaction(
+                $trans['id'],
+                $trans['type'],
+                $trans['date_transaction'],
+                $trans['montant'],
+                $trans['description'],
+                $trans['id_user']
+            );
+        }
+
+        $this->view('transaction_credit', [
+            'tableau' => $tableau,
+            'search' => $search
+        ]);
+    }
+    // Afficher uniquement les Débits avec recherche
+    public function afficherDebit()
+    {
+        $search = isset($_GET['search']) ? trim($_GET['search']) : "";
+        $transactions = Transaction::getDebit($search);
+        $tableau = [];
+
+        foreach ($transactions as $trans) {
+            $tableau[] = new Transaction(
+                $trans['id'],
+                $trans['type'],
+                $trans['date_transaction'],
+                $trans['montant'],
+                $trans['description'],
+                $trans['id_user']
+            );
+        }
+
+        $this->view('transaction_debit', [
+            'tableau' => $tableau,
+            'search' => $search
+        ]);
     }
 }

@@ -6,6 +6,9 @@ use core\Database;
 use PDO;
 use PDOException;
 use App\Models\User;
+use App\Controllers\DashboardController;
+use App\Models\Model_dashboard;
+
 //use App\Models\Transaction;
 
 
@@ -91,13 +94,25 @@ class UserController
 
         public function Connection()
     {
+    
 
         if (!empty($_POST["email"]) && !empty($_POST["mdp"])) {
             $email = $_POST["email"];
             $mdp = $_POST["mdp"];
 
-            if(User::se_connecter($email, $mdp)){
-                 $this->view("dashboard");
+            if($user = User::se_connecter($email, $mdp)){
+
+                $_SESSION["id"]= $user["id"];
+                $_SESSION["email"]= $user["email"];
+                $_SESSION["nom"]= $user["nom"];
+
+                $vars = Model_dashboard::selectAllData($_SESSION["id"]);
+                $tabData = array();
+                foreach($vars as $var){
+                    $elements = new Model_dashboard($var['debit'],$var['credit'],$var['mois'],$var['annee'],$var['id_user']);
+                    array_push($tabData,$elements);
+                }
+                $this->view("dashboard",["tabData"=>$tabData]);
             }
             else{
                  $this->view("login", ['Erreur' => 'email ou mot de passe incorrect']);
