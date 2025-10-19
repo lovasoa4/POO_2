@@ -11,7 +11,7 @@
 <div class="container-page">
 
   <div class="d-flex justify-content-between align-items-center mb-4 header-bar">
-    <h2 class="page-title"><a href="/dashboard">Cash Track</a></h2>
+    <h2 class="page-title"><a href="/dashboard1">Cash Track</a></h2>
 
     <!-- Barre de recherche -->
     <form action="/recherche" method="post" class="d-flex align-items-center search-bar">

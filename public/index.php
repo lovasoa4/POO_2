@@ -41,6 +41,7 @@ $router->get('/delete', 'TransactionController@delete');
 
 // --- Dashboard ---
 $router->get('/dashboard', 'DashboardController@getAllDataDashboard');
+$router->get('/dashboard1', 'UserController@dashboard');
 
 // Exécuter le router
 $router->run();

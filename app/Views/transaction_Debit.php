@@ -6,54 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transactions Débit</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f5f6f7;
-            font-family: "Segoe UI", sans-serif;
-        }
-
-        .page-title {
-            color: #b02a37;
-            font-weight: 700;
-            margin-bottom: 30px;
-        }
-
-        .content-box {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 25px;
-        }
-
-        .table th {
-            background-color: #f1f1f1;
-            color: #333;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: #fafafa;
-        }
-
-        .search-bar input {
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-
-        .btn-danger {
-            background-color: #b02a37;
-            border: none;
-        }
-
-        .btn-danger:hover {
-            background-color: #96232e;
-        }
-
-        .alert {
-            border-radius: 6px;
-        }
-    </style>
+    <link rel="stylesheet" href="./assets/css/transaction_credit.css">
+    
 </head>
 
 <body>
@@ -62,7 +16,7 @@
 
         <!-- Barre retour + recherche -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <a href="/transactions" class="btn btn-outline-secondary btn-sm">⬅ Retour</a>
+            <a href="/dashboard1" class="btn btn-outline-secondary btn-sm">⬅ Retour</a>
 
             <form method="GET" class="d-flex search-bar" style="max-width: 350px;">
                 <input type="text" name="search" class="form-control me-2"

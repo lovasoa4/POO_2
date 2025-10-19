@@ -49,7 +49,13 @@ class UserController
 
     public function dashboard()
     {
-        $this->view('dashboard');
+         $vars = Model_dashboard::selectAllData($_SESSION["id"]);
+                $tabData = array();
+                foreach($vars as $var){
+                    $elements = new Model_dashboard($var['debit'],$var['credit'],$var['mois'],$var['annee'],$var['id_user']);
+                    array_push($tabData,$elements);
+                }
+                $this->view("dashboard",["tabData"=>$tabData]);
     }
 
 
