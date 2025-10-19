@@ -40,7 +40,7 @@ $tabData = $tabData ?? [];
   <aside class="sidebar" style="width:240px; position:fixed; top:0; left:0; height:100%; background:#198754; color:#fff; padding:20px;">
     <h2 class="logo">Cash Track</h2>
     <nav class="menu">
-      <a href="#" class="active" style="color:#fff; display:flex; align-items:center; gap:8px;"><i class='bx bx-grid-alt'></i> Tableau de bord</a>
+      <a href="#"  style="color:#fff; display:flex; align-items:center; gap:8px;"><i class='bx bx-grid-alt'></i> Tableau de bord</a>
       <a href="#" style="color:#fff; display:flex; align-items:center; gap:8px;"><i class='bx bx-user'></i> Utilisateurs</a>
       <a href="/afficher" style="color:#fff; display:flex; align-items:center; gap:8px;"><i class='bx bx-transfer-alt'></i> Transactions</a>
       <div class="submenu" style="padding-left:20px;">
