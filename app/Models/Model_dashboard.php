@@ -18,7 +18,7 @@ class Model_dashboard{
         $this->credit=$credit;
         $this->debit=$debit;
         $this->mois=$mois;
-        $this->annee=$annee;
+        $this->annee=$annee; 
         $this->id_User=$id_User;
         $total=$debit + $credit;
         if($debit > $credit){
