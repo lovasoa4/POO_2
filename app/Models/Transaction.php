@@ -322,6 +322,51 @@ public static function getCredit($search = "")
         die("❌ Erreur lors de la recherche : " . $e->getMessage());
     }
 }
+
+//
+  public static function select_all_with_credit_debit() {
+        $db = new Database();
+        $pdo = $db->getConnection();
+        try {
+            $stmt = $pdo->prepare("
+                SELECT 
+                    id,
+                    type,
+                    date_transaction,
+                    description,
+                    id_user,
+                    CASE WHEN type = 'Crédit' THEN montant ELSE NULL END AS credit,
+                    CASE WHEN type = 'Débit' THEN montant ELSE NULL END AS debit
+                FROM transaction
+                ORDER BY date_transaction DESC
+            ");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die('Erreur de sélection : ' . $e->getMessage());
+        }
+    }
+
+        public static function selectAllData($userId)
+    {
+        $db = new Database();
+        $pdo = $db->getConnection();
+
+        $sql = "SELECT *
+                FROM transaction
+                WHERE id_user = :id_user
+                ORDER BY date_transaction DESC";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id_user' => $userId]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+
+
+
 }
 ?>
 

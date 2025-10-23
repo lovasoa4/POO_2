@@ -1,93 +1,98 @@
 <?php
 namespace App\Models;
 
+use PDO;
 use Core\Database;
 
-class Model_dashboard{
-    private $debit;
-    private $credit;
-    private $mois;
-    private $annee;
-    private $evolution;
-    private $evaluation;
+class Model_dashboard {
 
-    private $id_User;
+    private $pdo;
 
-
-    public function __construct($credit,$debit,$mois,$annee,$id_User){
-        $this->credit=$credit;
-        $this->debit=$debit;
-        $this->mois=$mois;
-        $this->annee=$annee; 
-        $this->id_User=$id_User;
-        $total=$debit + $credit;
-        if($debit > $credit){
-            $this->evaluation='perte';
-            $this->evolution= ($debit/$total) * 100;
-        }if($debit < $credit){
-            $this->evaluation='benefice';
-            $this->evolution= ($credit/$total) * 100;
-        }if($debit==$credit){
-            $this->evolution='constant';
-            $this->evaluation=0;
-        }
-        
+    public function __construct() {
+        $db = new Database();
+        $this->pdo = $db->getConnection();
     }
 
-    public function getDebit(){
-        return $this->debit;
-    }
-     public function getCredit(){
-        return $this->credit;
-    }
-    public function getMois(){
-        return $this->mois;
-    }
-     public function getAnnee(){
-        return $this->annee;
-    }
-     public function getEvolution(){
-        return $this->evolution;
-    }
-     public function getEvaluation(){
-        return $this->evaluation;
-    }
-       public function getIdUser(){
-        return $this->id_User;
+    public function getTotalCreditDebitByMonth($userId) {
+        $sql = "
+        SELECT 
+            COALESCE(vtc.annee, vtd.annee) AS annee,
+            COALESCE(vtc.mois, vtd.mois) AS mois,
+            IFNULL(vtc.total,0) AS total_credit,
+            IFNULL(vtd.total,0) AS total_debit
+        FROM view_total_credit vtc
+        LEFT JOIN view_total_debit vtd
+        ON vtc.annee = vtd.annee AND vtc.mois = vtd.mois AND vtc.id_user = vtd.id_user
+        WHERE vtc.id_user = :id_user
+        ORDER BY vtc.annee DESC, vtc.mois DESC
+        ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id_user' => $userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
     }
 
-
-
-
-    public static function selectAllData($id_User){
-        $pdo = new Database();
-        $db = $pdo->getConnection();
-
-        $sql='select vtc.mois , vtc.annee ,vtc.total as credit , vtd.total as debit ,vtd.id_user
-                from view_total_credit as vtc
-                inner join view_total_debit as vtd
-                on vtc.annee=vtd.annee and vtc.mois=vtd.mois and vtc.id_user=vtd.id_user
-                where vtc.id_user= :id_User and vtd.id_user= :id_User
-                order by annee desc , mois desc';
-        $statement=$db->prepare($sql);
-        $statement->execute([
-                 ":id_User" =>$id_User
-            ]);
-        return $statement->fetchAll();
+    public function getSoldeActuel($userId) {
+        $sql = "
+        SELECT 
+            SUM(CASE WHEN type='credit' THEN montant ELSE 0 END) -
+            SUM(CASE WHEN type='debit' THEN montant ELSE 0 END) AS solde
+        FROM transaction
+        WHERE id_user = :id_user
+        ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id_user' => $userId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['solde'] ?? 0;
     }
 
-      public static function TransactionDansUnMois($mois,$annee,$idUser,$db){
-        $sql="SELECT * FROM `view_transaction` 
-              WHERE mois= :mois  and  annee= :annee and id_USer= :idUser";
-        $statement =$db->prepare($sql);
-        $statement->execute([
-            ':mois' => $mois,
-            ':annee' => $annee,
-            ':idUser' => $idUser
-        ]);
-        return $statement->fetchAll();
+    public function getLastTransactions($userId, $limit = 10) {
+        $sql = "
+        SELECT date_transaction, type, montant, description
+        FROM transaction
+        WHERE id_user = :id_user
+        ORDER BY date_transaction DESC
+        LIMIT :limit
+        ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':id_user', $userId, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
     }
+    // 🔹 Totaux crédit et débit par jour pour un mois donné
+public function getDailyTransactions($userId, $mois, $annee) {
+    $sql = "
+        SELECT 
+            DAY(date_transaction) AS jour,
+            SUM(CASE WHEN type='credit' THEN montant ELSE 0 END) AS total_credit,
+            SUM(CASE WHEN type='debit' THEN montant ELSE 0 END) AS total_debit
+        FROM transaction
+        WHERE id_user = :id_user
+          AND MONTH(date_transaction) = :mois
+          AND YEAR(date_transaction) = :annee
+        GROUP BY DAY(date_transaction)
+        ORDER BY DAY(date_transaction)
+    ";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([
+        'id_user' => $userId,
+        'mois'    => $mois,
+        'annee'   => $annee
+    ]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
 }
 
+// 🔹 Récupérer les mois existants pour l'utilisateur
+public function getExistingMonths($userId) {
+    $sql = "
+        SELECT DISTINCT MONTH(date_transaction) AS mois, YEAR(date_transaction) AS annee
+        FROM transaction
+        WHERE id_user = :id_user
+        ORDER BY annee DESC, mois DESC
+    ";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute(['id_user' => $userId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
+}
 
-?>
+}

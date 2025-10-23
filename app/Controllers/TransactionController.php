@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Models\Transaction;
 use App\Models\Model_dashboard;
 
+
+
 class TransactionController
 {
     //  Ajouter une transaction
@@ -35,7 +37,7 @@ class TransactionController
                 echo " <script>alert('Erreur lors de l'ajout de la transaction.');</script>";
             }
 
-            $vars = Model_dashboard::selectAllData($_SESSION["id"]);
+            $vars = Transaction::selectAllData($_SESSION["id"]);
             $tabData = array();
             foreach ($vars as $var) {
                 $elements = new Model_dashboard($var['debit'], $var['credit'], $var['mois'], $var['annee'], $var['id_user']);
@@ -45,24 +47,20 @@ class TransactionController
         }
     }
     //Affichage de tous les transaction
-    public function afficher()
-    {
+ public function afficher()
+{
+    $transactions = Transaction::select_all_with_credit_debit();
+    $tableau = [];
 
-        $transactions = Transaction::select_transaction();
-        $tableau = [];
+    foreach ($transactions as $trans) {
+        $tableau[] = $trans;
+     
 
-        foreach ($transactions as $trans) {
-            $tableau[] = new Transaction(
-                $trans['id'],
-                $trans['type'],
-                $trans['date_transaction'],
-                $trans['montant'],
-                $trans['description'],
-                $trans['id_user']
-            );
-        }
-        include(ROOT . '/app/Views/transaction.php');
     }
+
+    $this->view('transaction', ['tableau' => $tableau]);
+}
+
 
     // Supprimer une transaction
     public function delete()

@@ -18,6 +18,9 @@ session_start();
 // Créer le router
 $router = new Core\Router();
 
+
+
+
 // ==========================
 // Définition des routes
 // ==========================
@@ -40,7 +43,7 @@ $router->get('/transaction_Debit', 'TransactionController@afficherDebit');
 $router->get('/delete', 'TransactionController@delete');
 
 // --- Dashboard ---
-$router->get('/dashboard', 'DashboardController@getAllDataDashboard');
+$router->get('/dashboard', 'UserController@dashboard');
 $router->get('/dashboard1', 'UserController@dashboard');
 
 // Exécuter le router

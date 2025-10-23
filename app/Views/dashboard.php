@@ -1,144 +1,165 @@
-<?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-$userEmail = $_SESSION['email'] ?? 'Utilisateur';
-$tabData = $tabData ?? [];
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cash Track - Tableau de bord</title>
-  <link rel="stylesheet" href="./assets/css/transaction.css">
-  <link rel="stylesheet" href="./assets/css/dashboard.css">
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-  <style>
-    .main-content { margin-left: 240px; padding: 20px; }
-    .topbar { display:flex; justify-content:flex-end; padding:10px 0; }
-    .user-info { display:flex; align-items:center; gap:8px; color:#333; }
-    .wrap { display:flex; flex-direction:column; gap:18px; max-width:1200px; margin:0 auto; }
-    .card { background:#fff; border-radius:10px; padding:18px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
-    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-    .table-wrap table { width:100%; border-collapse:collapse; }
-    .table-wrap th, .table-wrap td { padding:10px; border:1px solid #eee; text-align:center; }
-    .empty { text-align:center; padding:40px 10px; color:#666; }
-    .pill { padding:6px 10px; border-radius:999px; color:#fff; font-weight:600; display:inline-block; }
-    .income { background:#198754; }
-    .expense { background:#c82333; }
-    .neutral { background:#6c757d; }
-    .badge { cursor:pointer; }
-    .muted { color:#666; font-size:0.95rem; }
-    .search input { padding:6px 10px; border-radius:6px; border:1px solid #ccc; }
-  </style>
+<meta charset="UTF-8">
+<title>Dashboard - CashTrack</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<style>
+body { margin:0; font-family: 'Poppins', sans-serif; background:#f5f6fa; }
+.sidebar { width:220px; position:fixed; left:0; top:0; bottom:0; background:linear-gradient(180deg, #198754, #14532d); color:white; padding:20px 10px; display:flex; flex-direction:column; gap:10px; }
+.sidebar h2 { text-align:center; font-size:1.2rem; }
+.sidebar a { display:flex; align-items:center; gap:8px; color:white; text-decoration:none; padding:8px; border-radius:6px; transition:0.3s; font-size:0.9rem; }
+.sidebar a:hover { background:rgba(255,255,255,0.2); }
+.main { margin-left:240px; padding:25px; display:flex; gap:20px; }
+.dashboard-left { flex:2; }
+.dashboard-right { flex:1; }
+h1 { text-align:center; color:#14532d; margin-bottom:30px; font-size:1.5rem; }
+.cards { display:flex; gap:20px; flex-wrap:wrap; justify-content:start; }
+.card { background:white; border-radius:10px; padding:15px; box-shadow:0 4px 12px rgba(0,0,0,0.08); text-align:center; width:150px; }
+.value { font-size:1.1rem; font-weight:bold; }
+.credit { color:#28a745; }
+.debit { color:#dc3545; }
+.solde { color:#0d6efd; }
+#chartContainer { background:white; padding:15px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.08); height:250px; }
+.filter { text-align:center; margin-bottom:10px; }
+table { width:100%; border-collapse:collapse; margin-top:15px; background:white; font-size:0.85rem; }
+th, td { padding:6px 8px; border-bottom:1px solid #ddd; text-align:left; }
+th { background:#198754; color:white; }
+</style>
 </head>
-
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar" style="width:240px; position:fixed; top:0; left:0; height:100%; background:#198754; color:#fff; padding:20px;">
-    <h2 class="logo">Cash Track</h2>
-    <nav class="menu">
-      <a href="#"  style="color:#fff; display:flex; align-items:center; gap:8px;"><i class='bx bx-grid-alt'></i> Tableau de bord</a>
-      <a href="#" style="color:#fff; display:flex; align-items:center; gap:8px;"><i class='bx bx-user'></i> Utilisateurs</a>
-      <a href="/afficher" style="color:#fff; display:flex; align-items:center; gap:8px;"><i class='bx bx-transfer-alt'></i> Transactions</a>
-      <div class="submenu" style="padding-left:20px;">
-        <a href="/transaction_Credit" style="color:#fff; display:flex; align-items:center; gap:8px;"><i class='bx bx-plus-circle'></i> Crédit</a>
-        <a href="/transaction_Debit" style="color:#fff; display:flex; align-items:center; gap:8px;"><i class='bx bx-minus-circle'></i> Débit</a>
-      </div>
-      <a href="#" style="color:#fff; display:flex; align-items:center; gap:8px;"><i class='bx bx-phone-call'></i> Cas d'urgence</a>
-    </nav>
-  </aside>
 
-  <!-- Contenu principal -->
-  <div class="main-content">
-    <header class="topbar">
-      <div class="user-info">
-        <i class='bx bx-user-circle' style="font-size:1.6rem;"></i>
-        <span><?= htmlspecialchars($userEmail) ?></span>
-      </div>
-    </header>
+<aside class="sidebar">
+<h2>Cash Track</h2>
+<a href="#"><i class='bx bx-grid-alt'></i> Tableau de bord</a>
+<a href="#"><i class='bx bx-transfer'></i> Transactions</a>
+<a href="#"><i class='bx bx-plus-circle'></i> Crédit</a>
+<a href="#"><i class='bx bx-minus-circle'></i> Débit</a>
+<a href="#"><i class='bx bx-log-out'></i> Déconnexion</a>
+</aside>
 
-    <section class="dashboard-content" style="width:100%;">
-      <h1 style="text-align:center; margin-bottom:4vh;margin-top: -3vh;">Bienvenue sur le tableau de bord</h1>
+<main class="main">
 
-      <div class="wrap">
-        <div class="card">
-          <div class="header">
-            <div>
-              <div class="title"><strong>Résumé</strong></div>
-              <div class="subtitle" style="color:#666; font-size:0.95rem;">Vue des crédits / débits par mois</div>
-            </div>
-            <div class="controls">
-              <form action="" method="post" style="display:flex;flex-direction:row; gap:10px;">
-                <div class="search">
-                  <input type="search" name="nom" placeholder="Chercher par nom, description..." style="width:40vh;" />
-                </div>
-                <button class="badge" style="border:none; padding:8px 12px; border-radius:6px; background:#0d6efd; color:#fff;">Rechercher</button>
-                <button class="badge" type="button" disabled style="border:none; padding:8px 12px; border-radius:6px; background:#6c757d; color:#fff; opacity:0.9;">Exporter</button>
-              </form>
-            </div>
-          </div>
+<div class="dashboard-left">
+<h1>Dashboard de <?= htmlspecialchars($nom) ?></h1>
 
-          <div class="table-wrap">
-            <?php if (!empty($tabData)) : ?>
-              <table style="text-align:center;">
-                <thead>
-                  <tr>
-                    <th>Utilisateur</th>
-                    <th style="background-color: green;color:#f1f5f9;">Total Crédit</th>
-                    <th style="background-color: red;color:#f1f5f9;">Total Débit</th>
-                    <th style="background-color: orange;color:#f1f5f9;">Mois</th>
-                    <th style="background-color: greenyellow;color:#000;">Année</th>
-                    <th style="background-color: blue;color:#f1f5f9;">Évolution</th>
-                    <th style="background-color: black;color:#f1f5f9;">Évaluation</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php foreach ($tabData as $user) : ?>
-                    <tr>
-                      <td><?= htmlspecialchars($user->getIdUser()) ?></td>
-                      <td><?= number_format($user->getCredit(),0,',',' ') ?> MGA</td>
-                      <td><?= number_format($user->getDebit(),0,',',' ') ?> MGA</td>
-                      <td><?= htmlspecialchars($user->getMois()) ?></td>
-                      <td><?= htmlspecialchars($user->getAnnee()) ?></td>
-                      <td><?= htmlspecialchars($user->getEvolution()) ?> %</td>
-                      <td>
-                        <?php
-                        $eval = strtolower($user->getEvaluation());
-                        if ($eval === 'benefice' || $eval === 'bénéfice') {
-                          echo "<span class='pill income'>Bénéfice</span>";
-                        } elseif ($eval === 'perte') {
-                          echo "<span class='pill expense'>Perte</span>";
-                        } else {
-                          echo "<span class='pill neutral'>" . htmlspecialchars($eval) . "</span>";
-                        }
-                        ?>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
-                </tbody>
-              </table>
-            <?php else: ?>
-              <div class="empty">
-                <h2>Aucune transaction effectuée</h2>
-                <p>Effectuez une transaction pour commencer !</p>
-              </div>
-            <?php endif; ?>
-          </div>
-        </div>
+<div class="cards">
+    <div class="card">
+        <h4>Total Crédit</h4>
+        <div class="value credit"><?= number_format($totalCredit ?? 0, 0, ',', ' ') ?> MGA</div>
+    </div>
+    <div class="card">
+        <h4>Total Débit</h4>
+        <div class="value debit"><?= number_format($totalDebit ?? 0, 0, ',', ' ') ?> MGA</div>
+    </div>
+    <div class="card">
+        <h4>Solde Total</h4>
+        <div class="value solde"><?= number_format($soldeTotal ?? 0, 0, ',', ' ') ?> MGA</div>
+    </div>
+</div>
 
-        <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-          <div class="muted">Affichage 1–10 de <?= count($tabData) ?></div>
-          <div style="display:flex; gap:8px;">
-            <button style="border:0;padding:8px 12px;border-radius:8px;background:#f1f5f9;">← Préc</button>
-            <button style="border:0;padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,#198754,#14532d);color:white;">Suiv →</button>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+<h2>Dernières transactions</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Type</th>
+<th>Montant</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<?php foreach($lastTransactions ?? [] as $t): ?>
+<tr>
+<td><?= htmlspecialchars($t['date_transaction']) ?></td>
+<td><?= htmlspecialchars($t['type']) ?></td>
+<td><?= number_format($t['montant'], 0, ',', ' ') ?> MGA</td>
+<td><?= htmlspecialchars($t['description']) ?></td>
+</tr>
+<?php endforeach; ?>
+</tbody>
+</table>
+</div>
+
+<div class="dashboard-right">
+<div id="chartContainer">
+<div class="filter">
+<label for="moisFilter">Mois : </label>
+<select id="moisFilter">
+<?php foreach($existingMonths ?? [] as $m): ?>
+<option value="<?= $m['mois'] ?>-<?= $m['annee'] ?>" <?= ($m['mois']==$selectedMonth && $m['annee']==$selectedYear)?'selected':'' ?>>
+<?= $m['mois'].'/'.$m['annee'] ?>
+</option>
+<?php endforeach; ?>
+</select>
+</div>
+<canvas id="transactionsChart" style="height:180px;"></canvas>
+</div>
+</div>
+
+</main>
+
+<script>
+const dailyData = <?= json_encode($dailyTransactions ?? []) ?>;
+const ctx = document.getElementById('transactionsChart').getContext('2d');
+let chart;
+
+function updateChart() {
+    const labels = dailyData.map(d=>d.jour);
+    const credits = dailyData.map(d=>d.total_credit);
+    const debits  = dailyData.map(d=>d.total_debit);
+
+    if(chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Crédit',
+                    data: credits,
+                    backgroundColor: 'rgba(245, 222, 179, 0.6)', // beige transparent
+                    borderColor: 'rgba(245, 222, 179, 1)',
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    hoverBackgroundColor: 'rgba(255, 193, 7, 0.8)'
+                },
+                {
+                    label: 'Débit',
+                    data: debits,
+                    backgroundColor: 'rgba(255, 223, 0, 0.6)', // jaune transparent
+                    borderColor: 'rgba(255, 223, 0, 1)',
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    hoverBackgroundColor: 'rgba(255, 193, 7, 0.8)'
+                }
+            ]
+        },
+        options: {
+            responsive:true,
+            plugins: {
+                legend: { position:'top' },
+                tooltip: { mode:'index', intersect:false }
+            },
+            scales: {
+                y: { beginAtZero:true },
+                x: { grid:{display:false}, ticks:{font:{size:10}} }
+            }
+        }
+    });
+}
+
+updateChart();
+
+document.getElementById('moisFilter').addEventListener('change', e=>{
+    const sel = e.target.value;
+    const [mois, annee] = sel.split('-');
+    // Recharge la page avec le mois sélectionné
+    window.location.href = "/dashboard?mois="+mois+"&annee="+annee;
+});
+</script>
+
 </body>
-
 </html>

@@ -2,52 +2,58 @@
 namespace App\Controllers;
 
 use App\Models\Model_dashboard;
-use Core\Database;
 
-class DashboardController extends Fonction
-{
+class DashboardController {
+
+    private $dashboardModel;
+
+    public function __construct() {
+        if(session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $this->dashboardModel = new Model_dashboard();
+    }
+
     /**
-     * Affiche les données du tableau de bord
+     * Affiche le dashboard pour l'utilisateur connecté
      */
-    public function getAllDataDashboard()
-    {
-        // Vérifie si l'utilisateur est connecté
-        if (!isset($_SESSION['id'])) {
-            header('Location: /');
+    public function getAllDataDashboard() {
+        // 🔹 Récupérer l'ID et le nom depuis la session
+        $userId = $_SESSION['id'] ?? null;
+        $nom    = $_SESSION['nom'] ?? 'Invité';
+
+        if(!$userId) {
+            header("Location: /login");
             exit;
         }
 
-        $id = $_SESSION['id'];
-        $tabData = [];
+        // 🔹 Totaux par mois
+        $totalMonth = $this->dashboardModel->getTotalCreditDebitByMonth($userId);
 
-        try {
-            // Connexion à la base
-            $db = new Database();
-            $pdo = $db->getConnection();
+        // 🔹 Totaux globaux
+        $totalCredit = array_sum(array_column($totalMonth, 'total_credit'));
+        $totalDebit  = array_sum(array_column($totalMonth, 'total_debit'));
+        $soldeTotal  = $totalCredit - $totalDebit;
 
-            // Récupération des données
-            $datas = Model_dashboard::selectAllData($pdo, $id);
+        // 🔹 Solde actuel
+        $soldeActuel = $this->dashboardModel->getSoldeActuel($userId);
 
-            // Construction des objets du modèle
-            if (!empty($datas)) {
-                foreach ($datas as $data) {
-                    $tabData[] = new Model_dashboard(
-                        $data['credit'] ?? 0,
-                        $data['debit'] ?? 0,
-                        $data['mois'] ?? '',
-                        $data['annee'] ?? '',
-                        $data['id_user'] ?? ''
-                    );
-                }
-            }
-        } catch (\PDOException $e) {
-            echo '<h3 style="color:red;">Erreur base de données : ' . htmlspecialchars($e->getMessage()) . '</h3>';
-        } catch (\Exception $e) {
-            echo '<h3 style="color:red;">Erreur interne : ' . htmlspecialchars($e->getMessage()) . '</h3>';
-        }
+        // 🔹 Dernières transactions
+        $lastTransactions = $this->dashboardModel->getLastTransactions($userId, 10);
 
-        // Appel des vues
-        $this->view('navbar');
-        $this->view('view_dashboard', ['tabData' => $tabData]);
+        // 🔹 Préparer les données à passer à la vue
+        $data = [
+            'nom'              => $nom,
+            'totalMonth'       => $totalMonth,
+            'totalCredit'      => $totalCredit,
+            'totalDebit'       => $totalDebit,
+            'soldeTotal'       => $soldeTotal,
+            'soldeActuel'      => $soldeActuel,
+            'lastTransactions' => $lastTransactions
+        ];
+
+        // 🔹 Charger la vue
+        extract($data);
+
     }
 }
