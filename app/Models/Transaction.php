@@ -5,6 +5,11 @@ use pdo;
 use PDOException;
 use Core\Database; 
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 class Transaction {
     protected int $id;
     protected string $type;
@@ -44,16 +49,76 @@ class Transaction {
     }
 
     // Création d'une transaction
-    public static function create_transaction($type, $date_transaction, $montant, $description, $id_user) {
-        $db = new Database();
-        $pdo = $db->getConnection();
-        try {
-            $stmt = $pdo->prepare("INSERT INTO transaction (type, date_transaction, montant, description, id_user) VALUES (?, ?, ?, ?, ?)");
-            return $stmt->execute([$type, $date_transaction, $montant, $description, $id_user]);
-        } catch (PDOException $e) {
-            die("Erreur d' insertion: " . $e->getMessage());
+    public static function create_transaction($type, $date_transaction, $montant, $description, $id_user)
+        {
+            $db = new Database();
+            $pdo = $db->getConnection();
+
+            try {
+                // ✅ Étape 1 : Insertion de la transaction
+                $stmt = $pdo->prepare("
+                    INSERT INTO transaction (type, date_transaction, montant, description, id_user)
+                    VALUES (?, ?, ?, ?, ?)
+                ");
+                $stmt->execute([$type, $date_transaction, $montant, $description, $id_user]);
+
+                // ✅ Étape 2 : Récupérer l'email de l'utilisateur
+                $userStmt = $pdo->prepare("SELECT email, nom FROM users WHERE id_user = ?");
+                $userStmt->execute([$id_user]);
+                $user = $userStmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$user) {
+                    throw new Exception("Utilisateur non trouvé !");
+                }
+
+                // ✅ Étape 3 : Envoi de mail si c’est un débit
+                if (strtolower($type) === 'debit') {
+                    $mail = new PHPMailer(true);
+
+                    try {
+                        // Configuration SMTP
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'tonemail@gmail.com'; // 👉 ton adresse Gmail
+                        $mail->Password = 'ton_mot_de_passe_application'; // ⚠️ mot de passe d’application Gmail
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                        $mail->Port = 587;
+
+                        // Expéditeur et destinataire
+                        $mail->setFrom('tonemail@gmail.com', 'Banque Virtuelle');
+                        $mail->addAddress($user['email'], $user['nom']);
+
+                        // Contenu du mail
+                        $mail->isHTML(true);
+                        $mail->Subject = 'Notification de débit';
+                        $mail->Body = "
+                            <h2>Bonjour {$user['nom']},</h2>
+                            <p>Une nouvelle transaction a été enregistrée sur votre compte :</p>
+                            <ul>
+                                <li><b>Type :</b> $type</li>
+                                <li><b>Montant :</b> $montant Ar</li>
+                                <li><b>Date :</b> $date_transaction</li>
+                                <li><b>Description :</b> $description</li>
+                            </ul>
+                            <p>Merci d’avoir utilisé notre service.</p>
+                        ";
+
+                        $mail->send();
+                        // echo "Email envoyé à {$user['email']}";
+                    } catch (Exception $e) {
+                        error_log("Erreur d'envoi du mail : {$mail->ErrorInfo}");
+                    }
+                }
+
+                return true;
+
+            } catch (PDOException $e) {
+                die("Erreur d'insertion : " . $e->getMessage());
+            }
         }
-    }
+
+
     //fonction supprimer 
     public static function delete_transaction($id){
         $db = new Database();

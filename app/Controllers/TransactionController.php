@@ -14,10 +14,10 @@ class TransactionController
     {
         $this->view('Ajout_Transaction');
     }
+
     public function ajout()
     {
         if (
-
             !empty($_POST["description"]) &&
             !empty($_POST["type"]) &&    
             !empty($_POST["montant"]) &&
@@ -31,18 +31,22 @@ class TransactionController
             $id_user = $_POST["id_user"];
 
             $success = Transaction::create_transaction($type, $date_transaction, $montant, $description, $id_user);
+
             if ($success) {
-                echo " <script>alert('Transaction ajoutée avec succès !');</script>";
+                echo "<script>alert('Transaction ajoutée avec succès ! Un email a été envoyé.');</script>";
             } else {
-                echo " <script>alert('Erreur lors de l'ajout de la transaction.');</script>";
+                echo "<script>alert('Erreur lors de l’ajout de la transaction.');</script>";
             }
 
+            // Recharge les données du tableau
             $vars = Transaction::selectAllData($_SESSION["id"]);
-            $tabData = array();
+            $tabData = [];
+
             foreach ($vars as $var) {
                 $elements = new Model_dashboard($var['debit'], $var['credit'], $var['mois'], $var['annee'], $var['id_user']);
-                array_push($tabData, $elements);
+                $tabData[] = $elements;
             }
+
             $this->view("dashboard", ["tabData" => $tabData]);
         }
     }

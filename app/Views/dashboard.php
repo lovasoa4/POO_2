@@ -33,9 +33,9 @@ th { background:#198754; color:white; }
 <aside class="sidebar">
 <h2>Cash Track</h2>
 <a href="#"><i class='bx bx-grid-alt'></i> Tableau de bord</a>
-<a href="#"><i class='bx bx-transfer'></i> Transactions</a>
-<a href="#"><i class='bx bx-plus-circle'></i> Crédit</a>
-<a href="#"><i class='bx bx-minus-circle'></i> Débit</a>
+<a href="/afficher"><i class='bx bx-transfer'></i> Transactions</a>
+<a href="/transaction_Credit"><i class='bx bx-plus-circle'></i> Crédit</a>
+<a href="/transaction_Debit"><i class='bx bx-minus-circle'></i> Débit</a>
 <a href="#"><i class='bx bx-log-out'></i> Déconnexion</a>
 </aside>
 
