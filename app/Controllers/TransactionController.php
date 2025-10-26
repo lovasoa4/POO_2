@@ -43,6 +43,7 @@ class TransactionController
             // Ajouter la transaction en base
             $success = Transaction::create_transaction($type, $date_transaction, $montant, $description, $id_user);
 
+
             if ($success) {
                 // Envoyer l'email uniquement si l'email de l'utilisateur est défini
                 if ($user_email) {
@@ -58,6 +59,7 @@ class TransactionController
 
                 echo "<script>alert('Transaction ajoutée et email envoyé !'); window.location.href='/transaction';</script>";
             } else {
+                echo "<script>alert('Erreur lors de l’ajout de la transaction.');</script>";
                 echo "<script>alert('Erreur lors de l’ajout de la transaction.');</script>";
             }
         } else {
