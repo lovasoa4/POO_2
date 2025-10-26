@@ -14,10 +14,25 @@ $user_name = $_SESSION["nom"] ?? "Invité";
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="./assets/css/transaction.css">
+
+  
+  <link rel="stylesheet" href="./assets/css/transaction.css">
 </head>
 
 <body>
 
+  <!-- ======= NAVBAR ======= -->
+  <nav class="navbar-custom">
+    <h3><i class="bi bi-wallet2"></i> Cash Track</h3>
+
+    <div class="nav-links">
+      <a href="/dashboard"><i class="bi bi-house-door"></i> Tableau de bord</a>
+      <a href="/afficher"><i class="bi bi-arrow-left-right"></i> Transactions</a>
+      <a href="/transaction_Credit"><i class="bi bi-arrow-up-right-circle"></i> Crédit</a>
+      <a href="/transaction_Debit"><i class="bi bi-arrow-down-right-circle"></i> Débit</a>
+      <a href="/profil"><i class="bi bi-person-circle"></i> Profil</a>
+      <a href="/login"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
+      <a href="/ajout">ajout transaction</a>
   <!-- ======= TOP NAVBAR ======= -->
   <header class="top-navbar d-flex justify-content-between align-items-center px-4">
     <div class="brand d-flex align-items-center gap-2">

@@ -11,6 +11,9 @@
 </head>
 
 <body>
+    <?php 
+           include('navbar.php');
+    ?>
     <div class="container py-5">
         <h2 class="text-center page-title">Transactions Crédit</h2>
 
@@ -25,6 +28,7 @@
                 <button type="submit" class="btn btn-success">Rechercher</button>
             </form>
         </div>
+   
 
         <!-- Tableau -->
         <div class="content-box">

@@ -145,7 +145,7 @@ class TransactionController
             } else {
                 echo "<script>alert('Erreur lors de la suppression de la transaction.');</script>";
             }
-            header("location:../view/ListeTransaction.php");
+            
             exit;
         }
     }

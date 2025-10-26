@@ -8,8 +8,8 @@ use Core\Database;
 
 
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+ use PHPMailer\PHPMailer\PHPMailer;
+ use PHPMailer\PHPMailer\Exception;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
@@ -53,79 +53,82 @@ class Transaction {
 
     // Création d'une transaction
     public static function create_transaction($type, $date_transaction, $montant, $description, $id_user)
-        {
-            $db = new Database();
-            $pdo = $db->getConnection();
+{
+    $db = new Database();
+    $pdo = $db->getConnection();
 
-            try {
-                // ✅ Étape 1 : Insertion de la transaction
-                $stmt = $pdo->prepare("
-                    INSERT INTO transaction (type, date_transaction, montant, description, id_user)
-                    VALUES (?, ?, ?, ?, ?)
-                ");
-                $stmt->execute([$type, $date_transaction, $montant, $description, $id_user]);
+    try {
+        //   Insertion de la transaction dans la base
+        $stmt = $pdo->prepare("
+            INSERT INTO transaction (type, date_transaction, montant, description, id_user)
+            VALUES (?, ?, ?, ?, ?)
+        ");
+        $stmt->execute([$type, $date_transaction, $montant, $description, $id_user]);
 
-                // ✅ Étape 2 : Récupérer l'email de l'utilisateur
-                $userStmt = $pdo->prepare("SELECT email, nom FROM users WHERE id_user = ?");
-                $userStmt->execute([$id_user]);
-                $user = $userStmt->fetch(PDO::FETCH_ASSOC);
+        //   Si la transaction est de type "debit", on envoie un mail
+        if (strtolower($type) === 'Débit') {
+             echo"teste d'envoi d'email";
+            // Charger PHPMailer
+            require_once __DIR__ . '/../../vendor/autoload.php';
+           
 
-                if (!$user) {
-                    throw new Exception("Utilisateur non trouvé !");
-                }
+            //  3. Récupérer l'email de l'utilisateur connecté
+            $stmtUser = $pdo->prepare("SELECT nom, email FROM users WHERE id = ?");
+            $stmtUser->execute([$id]);
+            $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
 
-                // ✅ Étape 3 : Envoi de mail si c’est un débit
-                if (strtolower($type) === 'debit') {
-                    $mail = new PHPMailer(true);
+            if ($user && !empty($user['email'])) {
+                $mail = new PHPMailer(true);
 
-                    try {
-                        // Configuration SMTP
-                        $mail->isSMTP();
-                        $mail->Host = 'smtp.gmail.com';
-                        $mail->SMTPAuth = true;
-                        $mail->Username = 'tonemail@gmail.com'; // 👉 ton adresse Gmail
-                        $mail->Password = 'ton_mot_de_passe_application'; // ⚠️ mot de passe d’application Gmail
-                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                        $mail->Port = 587;
+                try {
+                    // Configuration SMTP (exemple avec Gmail)
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'manjakaandrianavalona12@gmail.com'; 
+                    $mail->Password = '0349508093'; //  mot de passe d’application Gmail
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port = 587;
 
-                        // Expéditeur et destinataire
-                        $mail->setFrom('tonemail@gmail.com', 'Banque Virtuelle');
-                        $mail->addAddress($user['email'], $user['nom']);
+                    //  Expéditeur et destinataire
+                    $mail->setFrom('manjakaandrianavalona12@gmail.com', 'Système de Transactions');
+                    $mail->addAddress($user['email'], $user['nom']);
 
-                        // Contenu du mail
-                        $mail->isHTML(true);
-                        $mail->Subject = 'Notification de débit';
-                        $mail->Body = "
-                            <h2>Bonjour {$user['nom']},</h2>
-                            <p>Une nouvelle transaction a été enregistrée sur votre compte :</p>
+                    //  Contenu du message
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Alerte de Débit sur votre compte';
+                    $mail->Body = "
+                        <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                            <h2 style='color: #d9534f;'>🔔 Alerte de Transaction Débit</h2>
+                            <p>Bonjour <b>{$user['nom']}</b>,</p>
+                            <p>Une nouvelle transaction <b>débit</b> a été enregistrée sur votre compte :</p>
                             <ul>
-                                <li><b>Type :</b> $type</li>
-                                <li><b>Montant :</b> $montant Ar</li>
-                                <li><b>Date :</b> $date_transaction</li>
-                                <li><b>Description :</b> $description</li>
+                                <li><b>Montant :</b> {$montant} Ar</li>
+                                <li><b>Date :</b> {$date_transaction}</li>
+                                <li><b>Description :</b> {$description}</li>
                             </ul>
-                            <p>Merci d’avoir utilisé notre service.</p>
-                        ";
+                            <p style='margin-top:10px;'>Merci de votre confiance.<br><b>Votre application de gestion</b></p>
+                        </div>
+                    ";
 
-                        $mail->send();
-                        // echo "Email envoyé à {$user['email']}";
-                    } catch (Exception $e) {
-                        error_log("Erreur d'envoi du mail : {$mail->ErrorInfo}");
-                    }
+                    $mail->send();
+                } catch (Exception $e) {
+                    error_log("Erreur d'envoi d'email : " . $mail->ErrorInfo);
                 }
-
-                return true;
-
-            } catch (PDOException $e) {
-                die("Erreur d'insertion : " . $e->getMessage());
             }
         }
 
+        return true;
+
+    } catch (PDOException $e) {
+        die("Erreur d'insertion : " . $e->getMessage());
+    }
+}
 
     //fonction supprimer 
     public static function delete_transaction($id){
-        $db = new Database();
-        $pdo = $db->getConnection();
+            $db = new Database();
+            $pdo = $db->getConnection();
         try {
             $stmt = $pdo->prepare("DELETE FROM transaction WHERE id = ? ");
             return $stmt->execute([$id]);
@@ -135,60 +138,60 @@ class Transaction {
     }
 
     // Sélection des transactions de type Débit uniquement
-public static function select_debit() {
-    $db = new Database();
-    $pdo = $db->getConnection();
-    try {
-        $stmt = $pdo->prepare("SELECT id, type, date_transaction, montant, description, id_user 
-                               FROM transaction 
-                               WHERE type = 'Débit' 
-                               ORDER BY id ASC");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        die("Erreur lors de la sélection des débits: " . $e->getMessage());
+    public static function select_debit() {
+            $db = new Database();
+            $pdo = $db->getConnection();
+        try {
+            $stmt = $pdo->prepare("SELECT id, type, date_transaction, montant, description, id_user 
+                                FROM transaction 
+                                WHERE type = 'Débit' 
+                                ORDER BY id ASC");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die("Erreur lors de la sélection des débits: " . $e->getMessage());
+        }
     }
-}
 
 // Sélection des transactions de type Crédit uniquement
-public static function select_credit() {
-    $db = new Database();
-    $pdo = $db->getConnection();
-    try {
-        $stmt = $pdo->prepare("SELECT id, type, date_transaction, montant, description, id_user 
-                               FROM transaction 
-                               WHERE type = 'Crédit' 
-                               ORDER BY id ASC");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        die("Erreur lors de la sélection des crédits: " . $e->getMessage());
+    public static function select_credit() {
+        $db = new Database();
+        $pdo = $db->getConnection();
+        try {
+            $stmt = $pdo->prepare("SELECT id, type, date_transaction, montant, description, id_user 
+                                FROM transaction 
+                                WHERE type = 'Crédit' 
+                                ORDER BY id ASC");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die("Erreur lors de la sélection des crédits: " . $e->getMessage());
+        }
     }
-}
 //miaffiche debit par recherche ou auto 
-public static function getDebit($search = "")
-{
-    $db = new Database();
-    $pdo = $db->getConnection();
+    public static function getDebit($search = "")
+    {
+        $db = new Database();
+        $pdo = $db->getConnection();
 
-    if (!empty($search)) {
-        // Recherche uniquement par description (ou designation)
-        $sql = "SELECT * FROM transaction
-                WHERE type = 'Débit'
-                AND description LIKE :search
-                ORDER BY date_transaction DESC";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['search' => "%$search%"]);
-    } else {
-        // Sans recherche, afficher tous les Débits
-        $sql = "SELECT * FROM transaction
-                WHERE type = 'Débit'
-                ORDER BY date_transaction DESC";
-        $stmt = $pdo->query($sql);
+        if (!empty($search)) {
+            // Recherche uniquement par description (ou designation)
+            $sql = "SELECT * FROM transaction
+                    WHERE type = 'Débit'
+                    AND description LIKE :search
+                    ORDER BY date_transaction DESC";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['search' => "%$search%"]);
+        } else {
+            // Sans recherche, afficher tous les Débits
+            $sql = "SELECT * FROM transaction
+                    WHERE type = 'Débit'
+                    ORDER BY date_transaction DESC";
+            $stmt = $pdo->query($sql);
+        }
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 // credit //
 
 public static function getCredit($search = "")

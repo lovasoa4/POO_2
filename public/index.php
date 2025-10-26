@@ -40,7 +40,7 @@ $router->post('/ajout_Transaction', 'TransactionController@ajout');
 $router->post('/recherche', 'TransactionController@recherche');
 $router->get('/transaction_Credit', 'TransactionController@afficherCredit');
 $router->get('/transaction_Debit', 'TransactionController@afficherDebit');
-$router->get('/delete', 'TransactionController@delete');
+$router->post('/delete', 'TransactionController@delete');
 
 // --- Dashboard ---
 $router->get('/dashboard', 'UserController@dashboard');
