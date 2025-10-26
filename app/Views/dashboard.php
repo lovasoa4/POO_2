@@ -37,7 +37,7 @@ th { background:#198754; color:white; }
 <main class="main">
 
 <div class="dashboard-left">
-<h1>Dashboard de <?= htmlspecialchars($nom) ?></h1>
+
 
 <div class="cards">
     <div class="card">
