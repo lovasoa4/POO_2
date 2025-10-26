@@ -3,7 +3,10 @@ namespace App\Models;
 
 use pdo;
 use PDOException;
-use Core\Database; 
+use Core\Database;
+
+
+
 
 class Transaction {
     protected int $id;
@@ -362,6 +365,7 @@ public static function getCredit($search = "")
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
 
 
 

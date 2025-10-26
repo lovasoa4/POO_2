@@ -1,10 +1,180 @@
- body {
-            background: #f8f9fa;
-        }
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .form-label {
-            font-weight: 600;
-        }
+/* ========== Reset minimal ========== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height: 100%; }
+
+/* ===== NAVBAR ===== */
+.app-navbar {
+    background: linear-gradient(90deg, #0f5132 0%, #198754 100%);
+    color: #fff;
+    padding: 12px 0;
+    box-shadow: 0 6px 20px rgba(3, 41, 24, 0.25);
+}
+.app-navbar .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+.app-navbar .brand i { font-size: 1.4rem; }
+.app-navbar .nav-right .user-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #e9fff0;
+    font-weight: 600;
+}
+.app-navbar .nav-right .username { margin-left: 4px; }
+
+/* ===== PAGE WRAPPER ===== */
+.page-wrapper {
+    padding: 40px 0;
+    min-height: calc(100vh - 72px);
+    background: linear-gradient(180deg, #f7fdf7 0%, #eef8ee 100%);
+    display: flex;
+    align-items: center;
+}
+
+/* ===== TRANSACTION CARD ===== */
+.transaction-card {
+    display: flex;
+    gap: 30px;
+    border-radius: 18px;
+    overflow: hidden;
+    padding: 0;
+    box-shadow: 0 8px 30px rgba(6, 65, 37, 0.12);
+    max-width: 980px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(245,255,245,0.98));
+}
+
+/* Left illustration area */
+.card-left {
+    flex: 1;
+    padding: 36px;
+    background: linear-gradient(180deg, rgba(8, 120, 74, 0.08), rgba(8, 120, 74, 0.03));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+}
+.card-left h2 {
+    color: #0b5b33;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+.card-left .muted {
+    color: #2f5f44;
+    opacity: 0.9;
+}
+
+/* tips list */
+.tips {
+    margin-top: 12px;
+    list-style: none;
+    color: #245034;
+}
+.tips li {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 6px 0;
+}
+.tips li i { color: #198754; font-size: 1.05rem; }
+
+/* decorative illustration */
+.card-illustration {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 8px;
+}
+.card-illustration .circle1, .card-illustration .circle2 {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(16px);
+}
+.card-illustration .circle1 {
+    width: 70px; height: 70px;
+    background: rgba(25,135,84,0.18);
+    top: -8px; left: -6px;
+}
+.card-illustration .circle2 {
+    width: 46px; height: 46px;
+    background: rgba(8,120,74,0.28);
+    bottom: -6px; right: -6px;
+}
+.card-illustration .icon-wrap {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    color: #0b5b33;
+    font-size: 1.6rem;
+}
+
+/* Right form area */
+.card-right {
+    flex: 1.15;
+    padding: 28px;
+}
+
+/* Input group styling */
+.form-label { color: #234b35; font-weight: 600; }
+.input-group-text {
+    background: #f1fff6;
+    border: 1px solid rgba(34,75,53,0.08);
+    color: #0b5b33;
+}
+.form-control {
+    border-radius: 10px;
+    border: 1px solid rgba(34,75,53,0.09);
+    box-shadow: none;
+}
+.form-control:focus {
+    outline: none;
+    border-color: #198754;
+    box-shadow: 0 6px 20px rgba(25,135,84,0.12);
+}
+
+/* Buttons */
+.btn-light-outline {
+    background: transparent;
+    color: #0b5b33;
+    border: 1px solid rgba(11,91,51,0.08);
+    padding: 10px 16px;
+    border-radius: 10px;
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn-light-outline:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(8,120,74,0.06);
+}
+
+.btn-save {
+    background: linear-gradient(90deg, #0f9b51 0%, #198754 100%);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    transition: transform .12s ease, box-shadow .18s ease;
+}
+.btn-save:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(7,93,48,0.18);
+}
+
+/* Responsive behaviour */
+@media (max-width: 900px) {
+    .transaction-card { flex-direction: column; padding: 18px; }
+    .card-left { order: 2; padding: 20px; }
+    .card-right { order: 1; padding: 20px; }
+    .card-left h2 { font-size: 1.3rem; }
+}
+
+/* small screens tweaks */
+@media (max-width: 480px) {
+    .app-navbar .brand { font-size: 1rem; }
+    .tips li { font-size: 0.95rem; }
+    .card-right { padding: 14px; }
+}
