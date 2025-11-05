@@ -1,25 +1,22 @@
 <?php
-// ============================================
-// 1. public/index.php (Point d'entrée principal)
-// ============================================
+// public/index.php
 
 // Définir les chemins racine
 define('ROOT', dirname(__DIR__));
 define('APP', ROOT . '/app');
 define('CORE', ROOT . '/core');
 
-// Charger l'autoloader
+// Charger l'autoloader (adapte selon ton autoloader)
 require_once CORE . '/Autoloader.php';
 Core\Autoloader::register();
 
-// Démarrer la session
-session_start();
+// Démarrer la session UNE SEULE FOIS
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Créer le router
 $router = new Core\Router();
-
-
-
 
 // ==========================
 // Définition des routes
@@ -27,11 +24,15 @@ $router = new Core\Router();
 
 // --- Routes utilisateur ---
 $router->get('/', 'UserController@index');
-$router->get('/users', 'UserController@index');
-$router->get('/users/form', 'UserController@form');
+$router->get('/login', 'UserController@index');
+$router->post('/login', 'UserController@Connection');
+
 $router->get('/createUser', 'UserController@createUser');
 $router->post('/createUser', 'UserController@insertion');
-$router->post('/login', 'UserController@Connection');
+
+$router->get('/dashboard', 'UserController@dashboard');
+$router->get('/dashboard1', 'UserController@dashboard');
+$router->get('/logout', 'UserController@logout');
 
 // --- Routes transaction ---
 $router->get('/afficher', 'TransactionController@afficher');
@@ -41,10 +42,6 @@ $router->post('/recherche', 'TransactionController@recherche');
 $router->get('/transaction_Credit', 'TransactionController@afficherCredit');
 $router->get('/transaction_Debit', 'TransactionController@afficherDebit');
 $router->post('/delete', 'TransactionController@delete');
-
-// --- Dashboard ---
-$router->get('/dashboard', 'UserController@dashboard');
-$router->get('/dashboard1', 'UserController@dashboard');
 
 // Exécuter le router
 $router->run();

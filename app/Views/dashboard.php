@@ -11,34 +11,78 @@ $user_name = $_SESSION["nom"] ?? "Invité";
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* ===== RESET ===== */
 * { box-sizing: border-box; margin:0; padding:0; font-family:'Poppins', sans-serif; }
 body { background: linear-gradient(135deg, #f6fbf7, #e9f6ee); display:flex; min-height:100vh; }
 
-/* ===== TOP NAVBAR ===== */
-.top-navbar {
-    position: fixed; top:0; left:250px; right:0; height:60px;
-    background: linear-gradient(90deg,#0f5132,#198754);
-    color:white; display:flex; justify-content:space-between; align-items:center;
-    padding:0 20px; z-index:100; box-shadow:0 3px 10px rgba(0,0,0,0.15);
-}
-.top-navbar .brand { font-weight:700; font-size:1.1rem; display:flex; align-items:center; gap:8px; }
-.top-navbar .user-info { display:flex; align-items:center; gap:10px; }
-.top-navbar .user-info a { color:white; text-decoration:none; border:1px solid rgba(255,255,255,0.4); padding:4px 10px; border-radius:6px; transition:0.3s; }
-.top-navbar .user-info a:hover { background: rgba(255,255,255,0.15); }
-
-/* ===== SIDEBAR ===== */
+/* ===== SIDEBAR (modifié du second code) ===== */
 .sidebar {
-    position: fixed; top:0; left:0; width:250px; height:100%;
-    background: linear-gradient(180deg,#198754,#14532d);
-    color:white; padding-top:80px; display:flex; flex-direction:column; gap:10px; box-shadow:4px 0 10px rgba(0,0,0,0.1);
+  width: 240px;
+  background: #198754;
+  color: #fff;
+  height: 100vh;
+  padding: 25px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.sidebar h2 { text-align:center; font-size:1.2rem; font-weight:700; margin-bottom:15px; }
-.sidebar a { display:flex; align-items:center; gap:10px; color:#d1e8dc; text-decoration:none; padding:12px 16px; border-radius:8px; transition:0.3s; font-weight:500; }
-.sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.15); color:#fff; padding-left:20px; }
+.navbar-custom h3 {
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.nav-links a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  transition: all 0.3s;
+  font-size: 0.95rem;
+}
+.nav-links a:hover, .nav-links a.active { background: #157347; }
+.user-info {
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.3);
+  padding-top: 15px;
+  font-size: 0.95rem;
+}
+
+/* ===== TOPBAR ===== */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 240px;
+  height: 60px;
+  width: calc(100% - 240px);
+  background: #47915dff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 25px;
+  z-index: 10;
+}
+.top-bar .user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: #fff;
+}
+.top-bar .user i { font-size: 1.6rem; }
 
 /* ===== MAIN CONTENT ===== */
-.main-content { margin-left:250px; padding-top:80px; padding:30px 40px; width:calc(100% - 250px); }
+.main-content {
+  margin-left: 240px;
+  margin-top: 70px;
+  padding: 30px 40px;
+  width: calc(100% - 240px);
+}
 
 /* ===== HEADER ===== */
 .page-title { font-weight:700; color:#146c43; margin-bottom:25px; font-size:1.5rem; }
@@ -52,13 +96,6 @@ body { background: linear-gradient(135deg, #f6fbf7, #e9f6ee); display:flex; min-
 .card.debit { border-top:5px solid #dc3545; color:#dc3545; }
 .card.solde { border-top:5px solid #0d6efd; color:#0d6efd; }
 
-/* ===== TABLE ===== */
-.table-container { background:white; border-radius:12px; padding:15px; box-shadow:0 3px 12px rgba(0,0,0,0.08); overflow-x:auto; }
-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
-th, td { padding:8px 10px; text-align:left; border-bottom:1px solid #ddd; }
-th { background:#198754; color:white; }
-tr:hover td { background:#f1fdf4; }
-
 /* ===== CHART ===== */
 #chartContainer { background:white; padding:15px; border-radius:12px; box-shadow:0 3px 12px rgba(0,0,0,0.08); margin-top:30px; }
 .filter { text-align:center; margin-bottom:10px; }
@@ -66,40 +103,38 @@ tr:hover td { background:#f1fdf4; }
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
-    .sidebar { width:200px; }
-    .main-content { margin-left:200px; padding:20px; }
-    .cards { justify-content:center; }
+  .sidebar { width:200px; }
+  .main-content { margin-left:200px; padding:20px; }
+  .cards { justify-content:center; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- TOP NAVBAR -->
-<header class="top-navbar">
-    <div class="brand"><i class="bi bi-wallet2"></i> CashTrack</div>
-    <div class="user-info">
-        <i class="bi bi-person-circle"></i> <?= htmlspecialchars($user_name) ?>
-        <a href="/logout"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
-    </div>
-</header>
-
 <!-- SIDEBAR -->
 <aside class="sidebar">
-<h2>Cash Track</h2>
-<a href="#"><i class='bx bx-grid-alt'></i> Tableau de bord</a>
-<a href="/afficher"><i class='bx bx-transfer'></i> Transactions</a>
-<a href="/transaction_Credit"><i class='bx bx-plus-circle'></i> Crédit</a>
-<a href="/transaction_Debit"><i class='bx bx-minus-circle'></i> Débit</a>
-<a href="#"><i class='bx bx-log-out'></i> Déconnexion</a>
-<h2>Navigation</h2>
-<a href="/dashboard1" class="active"><i class="bi bi-speedometer2"></i> Tableau de bord</a>
-<a href="/afficher"><i class="bi bi-transfer"></i> Transactions</a>
-<a href="transaction_Credit"><i class="bi bi-plus-circle"></i> Crédit</a>
-<a href="transaction_Debit"><i class="bi bi-dash-circle"></i> Débit</a>
-<a href="/ajout"><i class="bi bi-plus-square"></i> Ajouter transaction</a>
-<a href="/profil"><i class="bi bi-person"></i> Profil</a>
+  <nav class="navbar-custom">
+    <h3><i class="bi bi-wallet2"></i> CashTrack</h3>
+    <div class="nav-links">
+        <a href="/dashboard"class="active"><i class="bi bi-house-door"></i> Tableau de bord</a>
+        <a href="/afficher" ><i class="bi bi-arrow-left-right"></i> Transactions</a>
+        <a href="/transaction_Credit"><i class="bi bi-arrow-up-right-circle"></i> Crédit</a>
+        <a href="/transaction_Debit"><i class="bi bi-arrow-down-right-circle"></i> Débit</a>
+        <a href="/ajout"><i class="bi bi-plus-circle"></i> Ajouter transaction</a>
+        <a href="/logout"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
+
+    </div>
+  </nav>
 </aside>
+
+<!-- TOPBAR -->
+<div class="top-bar">
+  <div class="user">
+    <i class="bi bi-person-circle"></i>
+    <span><?= htmlspecialchars($user_name) ?></span>
+  </div>
+</div>
 
 <!-- MAIN CONTENT -->
 <main class="main-content">
@@ -119,30 +154,6 @@ tr:hover td { background:#f1fdf4; }
         <h4>Solde Total</h4>
         <div class="value"><?= number_format($soldeTotal ?? 0,0,',',' ') ?> MGA</div>
     </div>
-</div>
-
-<!-- TABLEAU DES DERNIERES TRANSACTIONS -->
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Date</th>
-<th>Type</th>
-<th>Montant</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<?php foreach($lastTransactions ?? [] as $t): ?>
-<tr>
-<td><?= htmlspecialchars($t['date_transaction']) ?></td>
-<td><?= htmlspecialchars($t['type']) ?></td>
-<td><?= number_format($t['montant'],0,',',' ') ?> MGA</td>
-<td><?= htmlspecialchars($t['description']) ?></td>
-</tr>
-<?php endforeach; ?>
-</tbody>
-</table>
 </div>
 
 <!-- CHART -->
@@ -193,5 +204,6 @@ document.getElementById('moisFilter').addEventListener('change', e=>{
     window.location.href = "/dashboard?mois="+mois+"&annee="+annee;
 });
 </script>
+
 </body>
 </html>

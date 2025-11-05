@@ -23,7 +23,7 @@
       <a href="/transaction_Credit"><i class="bi bi-arrow-up-right-circle"></i> Crédit</a>
       <a href="/transaction_Debit"><i class="bi bi-arrow-down-right-circle"></i> Débit</a>
       <a href="/profil"><i class="bi bi-person-circle"></i> Profil</a>
-      <a href="/login"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
+      <a href="/logout"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
     </div>
 
     <div class="user-info">
